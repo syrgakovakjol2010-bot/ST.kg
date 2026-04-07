@@ -157,5 +157,30 @@
         // Вызов при загрузке
         updateFields();
     </script>
+    <script>
+async function registerPartner(event) {
+    event.preventDefault(); // Чтобы страница не перезагружалась
+    
+    const data = {
+        name: document.querySelector('input[placeholder="Акжол"]').value,
+        phone: document.querySelector('input[type="text"]:nth-of-type(1)').value, // Исправь селектор под свой инпут
+        tech_type: document.getElementById('techType').value,
+        specs: document.querySelector('#dynamicFields input')?.value || ""
+    };
+
+    const response = await fetch('/api/register_partner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    alert(result.message);
+}
+
+// Привязываем функцию к кнопке
+document.querySelector('form').onsubmit = registerPartner;
+    </script>
+    
 </body>
 </html>
