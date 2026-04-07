@@ -80,7 +80,7 @@ def register():
 # ──────────────────────────────────────────────
 # MAIN HTML TEMPLATE
 # ──────────────────────────────────────────────
-HTML = r"""
+HTML = 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
