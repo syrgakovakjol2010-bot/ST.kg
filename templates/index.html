@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru" class="h-full w-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ST.kg — СпецТех KG</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #121212; font-family: 'Manrope', sans-serif; overflow: hidden; }
+        .glass { background: rgba(33,33,33,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,215,0,0.1); }
+        .active-tab { color: #FFD700 !important; }
+        .page { display: none; height: 100vh; overflow-y: auto; padding-bottom: 100px; }
+        .page.active { display: block; }
+        .gold-border { border: 1px solid rgba(255,215,0,0.3); }
+        input, select, textarea { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; outline: none; }
+        input:focus { border-color: #FFD700 !important; }
+    </style>
+</head>
+<body class="text-white">
+
+    <header class="fixed top-0 w-full z-50 glass px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-black font-bold">ST</div>
+            <span class="font-extrabold text-yellow-500">ST.kg</span>
+        </div>
+        <button onclick="switchPage('profile')" class="p-2 glass rounded-full"><i data-lucide="user" class="w-5 h-5 text-yellow-500"></i></button>
+    </header>
+
+    <div id="home" class="page active px-4 pt-20">
+        <div class="glass p-5 rounded-2xl mb-6 mt-4">
+            <h2 class="text-xl font-extrabold mb-2">Ищете технику?</h2>
+            <p class="text-gray-400 text-sm">ST.kg — быстрый способ заказать спецтехнику во всех регионах Кыргызстана.</p>
+        </div>
+        
+        <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4 text-yellow-500"></i> Каталог</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="glass p-4 rounded-xl text-center border-yellow-500/20 border">
+                <i data-lucide="truck" class="w-8 h-8 mx-auto mb-2 text-yellow-500"></i>
+                <p class="text-xs font-bold">Самосвалы</p>
+            </div>
+            <div class="glass p-4 rounded-xl text-center">
+                <i data-lucide="construction" class="w-8 h-8 mx-auto mb-2 text-yellow-500"></i>
+                <p class="text-xs font-bold">Экскаваторы</p>
+            </div>
+            </div>
+    </div>
+
+    <div id="chat" class="page px-4 pt-20">
+        <div class="glass p-4 rounded-2xl mb-4">
+            <p class="text-yellow-500 font-bold text-sm">ИИ-Помощник</p>
+            <p class="text-xs text-gray-400">Опишите задачу, и я подберу технику.</p>
+        </div>
+        
+        <div class="space-y-4 mb-20">
+            <div class="bg-gray-800/50 p-3 rounded-lg max-w-[80%]">Привет! Что планируете строить?</div>
+        </div>
+
+        <div class="fixed bottom-24 left-0 w-full px-4">
+            <div class="glass p-2 rounded-full flex items-center gap-2">
+                <label class="p-3 cursor-pointer hover:text-yellow-500 transition">
+                    <i data-lucide="camera" class="w-6 h-6"></i>
+                    <input type="file" class="hidden" accept="image/*" onchange="handleImageUpload(this)">
+                </label>
+                <input type="text" placeholder="Напишите задачу..." class="flex-1 bg-transparent border-none p-2 outline-none text-sm">
+                <button class="bg-yellow-500 p-3 rounded-full text-black"><i data-lucide="send" class="w-5 h-5"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile" class="page px-4 pt-20">
+        <h2 class="text-xl font-extrabold mb-6">Стать партнером</h2>
+        <form class="space-y-4">
+            <div>
+                <label class="text-xs text-gray-400 mb-1 block">Ваше имя</label>
+                <input type="text" class="w-full p-3 rounded-xl" placeholder="Акжол">
+            </div>
+            <div>
+                <label class="text-xs text-gray-400 mb-1 block">Тип техники</label>
+                <select id="techType" class="w-full p-3 rounded-xl" onchange="updateFields()">
+                    <option value="crane">Автокран</option>
+                    <option value="dumper">Самосвал</option>
+                    <option value="excavator">Экскаватор</option>
+                </select>
+            </div>
+            
+            <div id="dynamicFields" class="space-y-4">
+                </div>
+
+            <div>
+                <label class="text-xs text-gray-400 mb-1 block">Фото техники</label>
+                <div class="border-2 border-dashed border-gray-700 rounded-2xl p-8 text-center cursor-pointer hover:border-yellow-500 transition" onclick="document.getElementById('techPhoto').click()">
+                    <i data-lucide="image-plus" class="w-10 h-10 mx-auto mb-2 text-gray-500"></i>
+                    <p class="text-xs text-gray-500">Нажмите, чтобы загрузить фото</p>
+                    <input type="file" id="techPhoto" class="hidden" multiple>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-yellow-500 text-black font-bold p-4 rounded-2xl mt-4">Отправить заявку</button>
+        </form>
+    </div>
+
+    <nav class="fixed bottom-0 w-full glass h-20 flex justify-around items-center px-6 border-t border-white/5">
+        <button onclick="switchPage('home')" id="nav-home" class="flex flex-col items-center gap-1 active-tab">
+            <i data-lucide="home" class="w-6 h-6"></i>
+            <span class="text-[10px]">Главная</span>
+        </button>
+        <button onclick="switchPage('chat')" id="nav-chat" class="flex flex-col items-center gap-1 text-gray-500">
+            <i data-lucide="message-square" class="w-6 h-6"></i>
+            <span class="text-[10px]">ИИ-Чат</span>
+        </button>
+        <button onclick="switchPage('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-gray-500">
+            <i data-lucide="user-plus" class="w-6 h-6"></i>
+            <span class="text-[10px]">Партнерам</span>
+        </button>
+    </nav>
+
+    <script>
+        // Инициализация иконок
+        lucide.createIcons();
+
+        // Переключение страниц
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            // Обновление иконок навигации
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
+            document.getElementById('nav-' + pageId).classList.add('active-tab');
+        }
+
+        // Динамические поля формы
+        function updateFields() {
+            const type = document.getElementById('techType').value;
+            const container = document.getElementById('dynamicFields');
+            let html = '';
+
+            if(type === 'crane') {
+                html = `<input type="number" placeholder="Грузоподъёмность (тонн)" class="w-full p-3 rounded-xl">`;
+            } else if(type === 'dumper') {
+                html = `<input type="number" placeholder="Объём кузова (м³)" class="w-full p-3 rounded-xl">`;
+            } else if(type === 'excavator') {
+                html = `<input type="text" placeholder="Длина стрелы (м)" class="w-full p-3 rounded-xl">`;
+            }
+            container.innerHTML = html;
+        }
+        
+        // Заглушка для ИИ-обработки фото
+        function handleImageUpload(input) {
+            if (input.files && input.files[0]) {
+                alert("Фото получено! ИИ начинает анализ объекта...");
+                // Здесь в будущем будет вызов Python-функции
+            }
+        }
+
+        // Вызов при загрузке
+        updateFields();
+    </script>
+</body>
+</html>
