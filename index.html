@@ -1,1 +1,303 @@
+# ──────────────────────────────────────────────
+# MAIN HTML TEMPLATE
+# ──────────────────────────────────────────────
+HTML = 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0a0a0f"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>ST.kg — Аренда Спецтехники</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          gold: '#FFD700',
+          'gold-dim': '#C9A800',
+          'gold-pale': '#FFF3A3',
+          dark: '#0a0a0f',
+          'dark-2': '#12121a',
+          'dark-3': '#1a1a26',
+          'dark-4': '#22223a',
+        },
+        fontFamily: {
+          display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
+          body: ['"Exo 2"', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; padding:0; background:#0a0a0f; font-family:'Exo 2',sans-serif; color:#e8e8f0; overflow-x:hidden; }
 
+  .glass {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,215,0,0.12);
+    border-radius: 16px;
+  }
+  .glass-strong {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,215,0,0.18);
+    border-radius: 20px;
+  }
+  .gold-text {
+    background: linear-gradient(135deg, #FFD700 0%, #FFF3A3 50%, #C9A800 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, #FFD700, #C9A800);
+    color: #0a0a0f;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    cursor: pointer;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+    width: 100%;
+    display: block;
+  }
+  .btn-gold:hover, .btn-gold:active { transform: translateY(-2px); box-shadow: 0 0 40px rgba(255,215,0,0.5); }
+  .btn-gold:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,215,0,0.15);
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    z-index: 100;
+    display: flex; justify-content: space-around; align-items: center;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 6px 20px; border-radius: 12px;
+    cursor: pointer; transition: all 0.2s ease;
+    color: rgba(232,232,240,0.45); min-width: 64px;
+  }
+  .nav-item.active { color: #FFD700; }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(255,215,0,0.7)); }
+  .nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.3px; white-space: nowrap; }
+
+  .page { display: none; padding: 0 0 90px 0; min-height: 100vh; animation: fadeUp 0.35s ease; }
+  .page.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  .form-input {
+    width: 100%; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.2); border-radius: 12px;
+    color: #e8e8f0; padding: 13px 16px;
+    font-family: 'Exo 2', sans-serif; font-size: 0.95rem;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-input:focus { border-color: rgba(255,215,0,0.6); box-shadow: 0 0 0 3px rgba(255,215,0,0.1); }
+  .form-input option { background: #1a1a26; color: #e8e8f0; }
+  .form-label { display: block; font-size: 0.82rem; font-weight: 600; color: rgba(255,215,0,0.75); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+  .equip-card {
+    position: relative; overflow: hidden; border-radius: 16px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,215,0,0.1);
+    transition: all 0.3s ease; cursor: pointer;
+  }
+  .equip-card:hover, .equip-card:active {
+    border-color: rgba(255,215,0,0.45); transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.15);
+  }
+  .card-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.4);
+    color: #FFD700; font-size: 0.7rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
+  }
+
+  .chat-bubble-bot {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,215,0,0.12);
+    border-radius: 4px 16px 16px 16px; padding: 12px 16px; max-width: 82%;
+    font-size: 0.9rem; line-height: 1.5;
+  }
+  .chat-bubble-user {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(201,168,0,0.15));
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 16px 4px 16px 16px; padding: 12px 16px; max-width: 82%;
+    font-size: 0.9rem; line-height: 1.5; margin-left: auto;
+  }
+  .typing-dot { width:7px; height:7px; border-radius:50%; background:#FFD700; animation: typingPulse 1.4s infinite ease-in-out; display:inline-block; margin:0 2px; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingPulse { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+  .mesh-bg { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+  .mesh-orb { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.07; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.3); border-radius: 2px; }
+
+  #toast {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: rgba(20,20,30,0.95); border: 1px solid rgba(255,215,0,0.4);
+    border-radius: 12px; padding: 12px 24px; font-size: 0.9rem; font-weight: 500;
+    z-index: 999; opacity: 0; transition: all 0.3s ease; pointer-events:none;
+    backdrop-filter: blur(20px); white-space: nowrap;
+  }
+  #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  #toast.success { border-color: rgba(34,197,94,0.5); color: #86efac; }
+  #toast.error   { border-color: rgba(239,68,68,0.5);  color: #fca5a5; }
+
+  .region-pill {
+    padding: 7px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    border: 1px solid rgba(255,215,0,0.2); color: rgba(232,232,240,0.7);
+    background: transparent;
+  }
+  .region-pill.active, .region-pill:hover { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.5); color: #FFD700; }
+
+  #page-ai { display: none; flex-direction: column; height: 100vh; }
+  #page-ai.active { display: flex; }
+</style>
+</head>
+<body>
+
+<div class="mesh-bg" aria-hidden="true">
+  <div class="mesh-orb" style="width:400px;height:400px;background:#FFD700;top:-100px;right:-100px;"></div>
+  <div class="mesh-orb" style="width:500px;height:500px;background:#1a3a8f;bottom:-150px;left:-150px;"></div>
+  <div class="mesh-orb" style="width:300px;height:300px;background:#4a1a8f;top:40%;left:30%;opacity:0.05;"></div>
+</div>
+
+<!-- ═══ PAGE: HOME ═══ -->
+<div id="page-home" class="page active" style="position:relative;z-index:1;">
+
+  <div style="padding:56px 20px 20px;background:linear-gradient(180deg,rgba(10,10,15,0.95) 0%,transparent 100%);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2.6rem;line-height:1;letter-spacing:2px;" class="gold-text">ST.KG</div>
+        <div style="font-size:0.72rem;color:rgba(232,232,240,0.45);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">Аренда Спецтехники</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:20px;padding:4px 10px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#22c55e;animation:typingPulse 2s infinite;"></div>
+          <span style="font-size:0.72rem;color:#86efac;font-weight:600;">ОНЛАЙН</span>
+        </div>
+        <div style="font-size:0.7rem;color:rgba(232,232,240,0.35);">7 регионов КР</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 20px;">
+    <div style="position:relative;margin-bottom:20px;">
+      <i data-lucide="search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,215,0,0.5);width:18px;height:18px;"></i>
+      <input type="text" placeholder="Найти технику..." class="form-input" style="padding-left:44px;" oninput="filterEquipment(this.value)"/>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="font-size:0.75rem;font-weight:600;color:rgba(232,232,240,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Регион</div>
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;">
+        <button class="region-pill active" onclick="selectRegion(this)">Все</button>
+        <button class="region-pill" onclick="selectRegion(this)">Бишкек</button>
+        <button class="region-pill" onclick="selectRegion(this)">Чуйская</button>
+        <button class="region-pill" onclick="selectRegion(this)">Иссык-Куль</button>
+        <button class="region-pill" onclick="selectRegion(this)">Ош</button>
+        <button class="region-pill" onclick="selectRegion(this)">Джалал-Абад</button>
+        <button class="region-pill" onclick="selectRegion(this)">Нарын</button>
+        <button class="region-pill" onclick="selectRegion(this)">Талас</button>
+        <button class="region-pill" onclick="selectRegion(this)">Баткен</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;">
+      <div class="glass" style="padding:14px 10px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#FFD700;">148</div>
+        <div style="font-size:0.68rem;color:rgba(232,232,240,0.5);text-transform:uppercase;letter-spacing:0.5px;">Единиц</div>
+      </div>
+      <div class="glass" style="padding:14px 10px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#FFD700;">7</div>
+        <div style="font-size:0.68rem;color:rgba(232,232,240,0.5);text-transform:uppercase;letter-spacing:0.5px;">Регионов</div>
+      </div>
+      <div class="glass" style="padding:14px 10px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#FFD700;">24/7</div>
+        <div style="font-size:0.68rem;color:rgba(232,232,240,0.5);text-transform:uppercase;letter-spacing:0.5px;">Поддержка</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;">
+      <button onclick="filterCategory(this,'all')" class="region-pill active" style="border-radius:12px;padding:9px 18px;">Все</button>
+      <button onclick="filterCategory(this,'excavator')" class="region-pill" style="border-radius:12px;padding:9px 18px;">⛏ Экскаваторы</button>
+      <button onclick="filterCategory(this,'crane')" class="region-pill" style="border-radius:12px;padding:9px 18px;">🏗 Краны</button>
+      <button onclick="filterCategory(this,'dump')" class="region-pill" style="border-radius:12px;padding:9px 18px;">🚚 Самосвалы</button>
+      <button onclick="filterCategory(this,'bulldozer')" class="region-pill" style="border-radius:12px;padding:9px 18px;">🚜 Бульдозеры</button>
+      <button onclick="filterCategory(this,'loader')" class="region-pill" style="border-radius:12px;padding:9px 18px;">🏋 Погрузчики</button>
+    </div>
+
+    <div id="equipment-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:12px;">
+
+      <div class="equip-card" data-category="excavator" data-name="гусеничный экскаватор cat 320">
+        <div class="card-badge">Доступен</div>
+        <div style="background:linear-gradient(135deg,#1a2a1a,#0f1f2a);padding:24px 16px 12px;text-align:center;"><div style="font-size:2.8rem;">⛏</div></div>
+        <div style="padding:12px;">
+          <div style="font-size:0.82rem;font-weight:700;line-height:1.3;margin-bottom:6px;">Экскаватор CAT 320</div>
+          <div style="font-size:0.72rem;color:rgba(232,232,240,0.5);margin-bottom:8px;">20 тонн • Бишкек</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div><span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#FFD700;">9 500</span><span style="font-size:0.68rem;color:rgba(232,232,240,0.45);"> сом/ч</span></div>
+            <div style="background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:#FFD700;font-weight:600;" onclick="switchPage('ai')">Заказать</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="equip-card" data-category="crane" data-name="автокран liebherr ltm 1050">
+        <div class="card-badge">Доступен</div>
+        <div style="background:linear-gradient(135deg,#1a1a2a,#2a1a10);padding:24px 16px 12px;text-align:center;"><div style="font-size:2.8rem;">🏗</div></div>
+        <div style="padding:12px;">
+          <div style="font-size:0.82rem;font-weight:700;line-height:1.3;margin-bottom:6px;">Автокран LTM 1050</div>
+          <div style="font-size:0.72rem;color:rgba(232,232,240,0.5);margin-bottom:8px;">50 тонн • Чуйская</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div><span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#FFD700;">14 000</span><span style="font-size:0.68rem;color:rgba(232,232,240,0.45);"> сом/ч</span></div>
+            <div style="background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:#FFD700;font-weight:600;" onclick="switchPage('ai')">Заказать</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="equip-card" data-category="dump" data-name="самосвал камаз 6520">
+        <div class="card-badge" style="background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.4);color:#86efac;">Срочно</div>
+        <div style="background:linear-gradient(135deg,#2a1a1a,#1a0f0f);padding:24px 16px 12px;text-align:center;"><div style="font-size:2.8rem;">🚚</div></div>
+        <div style="padding:12px;">
+          <div style="font-size:0.82rem;font-weight:700;line-height:1.3;margin-bottom:6px;">Самосвал КАМАЗ 6520</div>
+          <div style="font-size:0.72rem;color:rgba(232,232,240,0.5);margin-bottom:8px;">20 т • Ошская</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div><span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#FFD700;">5 500</span><span style="font-size:0.68rem;color:rgba(232,232,240,0.45);"> сом/ч</span></div>
+            <div style="background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:#FFD700;font-weight:600;" onclick="switchPage('ai')">Заказать</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="equip-card" data-category="bulldozer" data-name="бульдозер komatsu d85">
+        <div class="card-badge">Доступен</div>
+        <div style="background:linear-gradient(135deg,#1a2a10,#0f200a);padding:24px 16px 12px;text-align:center;"><div style="font-size:2.8rem;">🚜</div></div>
+        <div style="padding:12px;">
+          <div style="font-size:0.82rem;font-weight:700;line-height:1.3;margin-bottom:6px;">Бульдозер Komatsu D85</div>
+          <div style="font-size:0.72rem;color:rgba(232,232,240,0.5);margin-bottom:8px;">19 тонн • Иссык-Куль</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div><span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#FFD700;">11 000</span><span style="font-size:0.68rem;color:rgba(232,232,240,0.45);"> сом/ч</span></div>
+            <div style="background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:#FFD700;font-weight:600;" onclick="switchPage('ai')">Заказать</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="equip-card" data-category="loader" data-name="фр
